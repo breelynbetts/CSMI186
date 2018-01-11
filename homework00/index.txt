@@ -1,3 +1,0 @@
-/*
-  created using exanmple in class
-*/ 
