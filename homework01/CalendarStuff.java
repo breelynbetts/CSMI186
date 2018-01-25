@@ -39,7 +39,7 @@ public class CalendarStuff {
 
 
     public CalendarStuff() {
-       System.out.println( "Constructor called..." );  // replace this with the actual code
+       System.out.println( "Constructor called CalendarStuff" );
     }
 
 
@@ -170,8 +170,6 @@ public class CalendarStuff {
         default         : throw new IllegalArgumentException( "Illegal day value given to 'toDayOfWeekString()'." );
      }
   }
-
-
 
   /**
   * A method to return a count of the total number of days between two valid dates
