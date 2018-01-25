@@ -208,6 +208,11 @@ public class CalendarStuff {
      }
 
      // calculates differences in dates with the same years
+     for (long i = year1; i <= year2; i++) {
+        if (isLeapYear(i)) {
+          dayCount ++;
+        }
+      }
      if ( year1 == year2) {
        if (month1 == month2) {
          dayCount = day2 - day1;
@@ -224,52 +229,24 @@ public class CalendarStuff {
        }
        else if (month1 < month2) {
          for (long i = month1; i < month2; i++) {
-          dayCount += (days[(int)month1] - day1) + (day2) + days[(int)i];
+          dayCount += days[(int)i] ;
           }
-          dayCount += ((year2 - year1) * 365) ;
+          dayCount += ((year2 - year1) * 365) + (days[(int)month1] - day1) + day2 - (days[(int)month1]) ;
         }
        else if (month1 > month2) {
          for (long i = month1; i < DECEMBER; i++) {
-           dayCount += ((year2 - year1) * 365) +  (days[(int)i] ) + (day2);
+           dayCount += (days[(int)i] );
           }
           for (long i = JANUARY; i < month2; i++) {
-             dayCount += ( days[(int)i] )- (days[(int)month2]) + day2;
+             dayCount += ( days[(int)i] );
          }
-         dayCount += ((year2 - year1) * 365) - 365 ;
+         dayCount += (((year2 - year1) - 1) * 365) + (days[(int)month1] - day1) + day2 - 1 ;
        }
        }
 
 
 
 
-
-        for (long i = year1; i <= year2; i++) {
-          if (isLeapYear(i)) {
-            dayCount ++;
-          }
-        }
-     //}
-
-
-    //    else if (){
-    //      for (long i = month1; i < month2; i++) {
-    //        dayCount += days[(int)i]  ;
-    //      }
-    //    }
-    //   else {
-    //    for (long i = month1; i < DECEMBER; i++) {
-    //      dayCount += days[(int)i];
-    //    }
-    //    for (long i = JANUARY; i < month2; i++) {
-    //      dayCount += days[(int)i];
-    //    }
-    //    dayCount += ((year2 - 1) - (year1 + 1)) * 365;
-    //  }
-    //  for (long i = year1; i <= year2; i++) {
-    //    if (isLeapYear(i)) {
-    //      dayCount ++;
-    //    }
-    //  }
 
 
      System.out.println(" DayCount = " + dayCount);
