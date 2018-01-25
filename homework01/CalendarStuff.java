@@ -1,4 +1,9 @@
-
+/**
+  * File Name : CalendarStuff.java
+  * Purpose : Create an algorith that gives the number of days between two given dates.
+  * @author : Breelyn Betts
+  * Date : 2018 - 01 - 24
+*/
 public class CalendarStuff {
 
   /**
@@ -95,7 +100,6 @@ public class CalendarStuff {
   */
   public static int compareDate( long month1, long day1, long year1, long month2, long day2, long year2 ) {
 
-
     if (dateEquals(month1, day1, year1, month2, day2, year2)) {
       return 0;
     }
@@ -116,7 +120,7 @@ public class CalendarStuff {
   *         be decremented to make the appropriate index value
   */
   public static boolean isValidDate( long month, long day, long year ) {
-    if((isLeapYear(year) == true) && (month == FEBRUARY)) {
+    if((isLeapYear(year) == true) && ((month - 1) == FEBRUARY)) {
       day--;
     } // add more
     if( (year >= 0) && (month - 1 >= JANUARY && month - 1 <= DECEMBER) && ((day >= 1) && (day <= days[(int)month - 1])) ) {
@@ -169,5 +173,106 @@ public class CalendarStuff {
 
 
 
+  /**
+  * A method to return a count of the total number of days between two valid dates
+  * @param    month1 long   containing month number, starting with "1" for "January"
+  * @param    day1   long   containing day number
+  * @param    year1  long   containing four-digit year
+  * @param    month2 long   containing month number, starting with "1" for "January"
+  * @param    day2   long   containing day number
+  * @param    year2  long   containing four-digit year
+  * @return          long   count of total number of days
+  */
+  // count the days program
 
+  public static long daysBetween( long month1, long day1, long year1, long month2, long day2, long year2 ) {
+     long dayCount = 0;
+     if (compareDate(month1, day1, year1, month2, day2, year2) == 1) {
+       long temp = month1;
+       month1 = month2;
+       month2 = temp;
+       temp = day1;
+       day1 = day2;
+       day2 = temp;
+       temp = year1;
+       year1 = year2;
+       year2 = temp;
+     }
+
+     if (!isValidDate(month1, day1, year1)) {
+       throw new IllegalArgumentException( "Illegal day value given to 'daysBetween()'." );
+     } else if (!isValidDate(month2, day2, year2)) {
+       throw new IllegalArgumentException( "Illegal day value given to 'daysBetween()'." );
+     } else if (dateEquals(month1, day1, year1, month2, day2, year2) == true ){
+       return 0;
+     }
+
+     // calculates differences in dates with the same years
+     if ( year1 == year2) {
+       if (month1 == month2) {
+         dayCount = day2 - day1;
+       } else if (month1 != month2) {
+           for (long i = month1; i < month2; i++) {
+             dayCount += (day1 - days[(int)month1]) + (day2 - days[(int)month2]) + days[(int)i];
+           }
+       }
+     }
+
+     else if (year1 != year2) {
+       if (month1 == month2) {
+         dayCount += ((year2 - year1) * 365) + (day2 - day1);
+       }
+       else if (month1 < month2) {
+         for (long i = month1; i < month2; i++) {
+          dayCount += (days[(int)month1] - day1) + (day2) + days[(int)i];
+          }
+          dayCount += ((year2 - year1) * 365) ;
+        }
+       else if (month1 > month2) {
+         for (long i = month1; i < DECEMBER; i++) {
+           dayCount += ((year2 - year1) * 365) +  (days[(int)i] ) + (day2);
+          }
+          for (long i = JANUARY; i < month2; i++) {
+             dayCount += ( days[(int)i] )- (days[(int)month2]) + day2;
+         }
+         dayCount += ((year2 - year1) * 365) - 365 ;
+       }
+       }
+
+
+
+
+
+        for (long i = year1; i <= year2; i++) {
+          if (isLeapYear(i)) {
+            dayCount ++;
+          }
+        }
+     //}
+
+
+    //    else if (){
+    //      for (long i = month1; i < month2; i++) {
+    //        dayCount += days[(int)i]  ;
+    //      }
+    //    }
+    //   else {
+    //    for (long i = month1; i < DECEMBER; i++) {
+    //      dayCount += days[(int)i];
+    //    }
+    //    for (long i = JANUARY; i < month2; i++) {
+    //      dayCount += days[(int)i];
+    //    }
+    //    dayCount += ((year2 - 1) - (year1 + 1)) * 365;
+    //  }
+    //  for (long i = year1; i <= year2; i++) {
+    //    if (isLeapYear(i)) {
+    //      dayCount ++;
+    //    }
+    //  }
+
+
+     System.out.println(" DayCount = " + dayCount);
+     return dayCount;
+  }
 }
