@@ -148,8 +148,4 @@ public class StringStuff {
        return new String( reverse );
      }
 
-     public static void main (String[] args) {
-// should all the previous code go into this?
-     }
-
 }
