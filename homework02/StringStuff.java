@@ -1,3 +1,10 @@
+/**
+ * File Name : StringStuff.java
+ * Purpose : Create a file that contains String methods.
+ * @author : Breelyn Betts
+ * Date : 2018 - 02 - 06
+ */
+
 import java.util.Set;
 import java.util.LinkedHashSet;
 
@@ -51,7 +58,7 @@ public class StringStuff {
      * @return  String containing the &quot;even&quot; letters from the input
      */
      public static String evensOnly( String s ) {
-       String evens = " BDFHJLNPRTVXZbdfhjlmprtvxz";
+       String evens = " BDFHJLNPRTVXZbdfhjlnprtvxz";
        String noOdds = "";
 
        for (int i = 0; i < s.length(); i++) {
@@ -125,20 +132,24 @@ public class StringStuff {
       }
 
 
-      /**
-       * Method to return the reverse of a string passed as an argument
-       *
-       * @param s String containing the data to be reversed
-       * @return  String containing the reverse of the input string
-       */
-       public static String reverse( String s ) {
-         String reverse = "";
+    /**
+     * Method to return the reverse of a string passed as an argument
+     *
+     * @param s String containing the data to be reversed
+     * @return  String containing the reverse of the input string
+     */
+     public static String reverse( String s ) {
+       String reverse = "";
 
-         for (int i = s.length() - 1; i >= 0; i-- ) {
-           reverse = reverse + s.charAt(i);
-         }
-         System.out.println( "reverse: " + reverse);
-          return new String( reverse );
+       for (int i = s.length() - 1; i >= 0; i-- ) {
+         reverse = reverse + s.charAt(i);
        }
+       System.out.println( "reverse: " + reverse);
+       return new String( reverse );
+     }
+
+     public static void main (String[] args) {
+// should all the previous code go into this?
+     }
 
 }
