@@ -1,0 +1,134 @@
+
+A TOTAL OF SIXTY-SEVEN TESTS TO CHECK OPERATION OF THE STRINGSTUFF CLASS METHODS
+
+FIFTEEN TESTS FOR containsVowel():
+   Test for all lowercase vowels: true
+   Test for all uppercase vowels: true
+   Test for detecting lowercase 'a': true
+   Test for detecting uppercase 'A': true
+   Test for detecting lowercase 'e': true
+   Test for detecting uppercase 'E': true
+   Test for detecting lowercase 'i': true
+   Test for detecting uppercase 'I': true
+   Test for detecting lowercase 'o': true
+   Test for detecting uppercase 'O': true
+   Test for detecting lowercase 'u': true
+   Test for detecting uppercase 'U': true
+   Test for detecting lowercase 'y': true
+   Test for detecting uppercase 'Y': true
+   Test for detecting there are none: false
+   Test for string containing numbers and symbols with 'a' at the end: true
+
+TEN TESTS FOR isPalindrome():
+   Testing 'a' should return true: true
+   Testing 'ab' should return false: false
+   Testing 'aba' should return true: true
+   Testing 'amanaplanacanalpanama' should return true: true
+   Testing 'ABBA' should return true: true
+   Testing 'RaCeCaR' should return true: true
+   Testing 'madamiamadam' should return false: false
+   Testing 'abcdefghigfedcba' should return false: false
+   Testing 'abcdefgh gfedcba' should return false: false
+   Testing '1!2@3#4$5%5$4#3@2!1' should return true: true
+
+NINE TESTS FOR evensOnly():
+   Testing 'REHEARSALSZ' should return RHRLZ:  string output RHRLZ
+got it
+   Testing 'REhearSALsz' should return RhrLz:  string output RhrLz
+got it
+   Testing 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' should return BDFHJLNPRTVXZ:  string output BDFHJLNPRTVXZ
+got it
+   Testing 'abcdefghijklmnopqrstuvwxyz' should return bdfhjlnprtvxz:  string output bdfhjlnprtvxz
+got it
+   Testing 'AbCdEfGhIjKlMnOpQrStUvWxYz' should return bdfhjlnprtvxz:  string output bdfhjlnprtvxz
+got it
+   Testing 'ACEGIKMOQSUWY' should return empty string:  string output 
+got it
+   Testing 'acegikmoqsuwy' should return empty string:  string output 
+got it
+   Testing empty string should return empty string:  string output 
+got it
+   Testing 'REhe12ar^^SALsz' should return RhrLz:  string output RhrLz
+got it
+
+NINE TESTS FOR oddsOnly():
+   Testing 'xylophones' should return yooes:  string output yooes
+got it
+   Testing 'XYloPHonES' should return YooES:  string output YooES
+got it
+   Testing 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' should return ACEGIKMOQSUWY:  string output ACEGIKMOQSUWY
+got it
+   Testing 'abcdefghijklmnopqrstuvwxyz' should return bdfhjlnprtvxz:  string output acegikmoqsuwy
+got it
+   Testing 'AbCdEfGhIjKlMnOpQrStUvWxYz' should return bdfhjlnprtvxz:  string output ACEGIKMOQSUWY
+got it
+   Testing 'BDFHJLNPRTVXZ' should return empty string:  string output 
+got it
+   Testing 'bdfhjlnprtvxz' should return empty string:  string output 
+got it
+   Testing empty string should return empty string:  string output 
+got it
+   Testing 'xy$%lo23ph((on97es' should return yooes:  string output yooes
+got it
+
+EIGHT TESTS FOR evensOnlyNoDupes():
+   Testing 'xylophones' should return xlphn:  string output xlphn
+new string outputxlphn
+got it
+   Testing 'XYloPHonES' should return XlPHn:  string output XlPHn
+new string outputXlPHn
+got it
+   Testing 'AAAABBBBAAAA' should return B:  string output BBBB
+new string outputB
+got it
+   Testing 'shshshshshshshsh' should return h:  string output hhhhhhhh
+new string outputh
+got it
+   Testing 'AAbbAAbbCCddCCdd' should return bd:  string output bbbbdddd
+new string outputbd
+got it
+   Testing empty string should return empty string:  string output 
+new string output
+got it
+   Testing 'California' should return lfrn:  string output lfrn
+new string outputlfrn
+got it
+   Testing 'ACEGIKMOQSUWYACEGIKMOQSUWY' should return the empty string:  string output 
+new string output
+got it
+
+EIGHT TESTS FOR oddsOnlyNoDupes():
+   Testing 'xylophones' should return yoes:  string output yooes
+new string outputyoes
+got it
+   Testing 'XYloPHonES' should return YoES:  string output YooES
+new string outputYoES
+got it
+   Testing 'AAAABBBBAAAA' should return A:  string output AAAAAAAA
+new string outputA
+got it
+   Testing 'shshshshshshshsh' should return h:  string output ssssssss
+new string outputs
+got it
+   Testing 'AAbbAAbbCCddCCdd' should return bd:  string output AAAACCCC
+new string outputAC
+got it
+   Testing empty string should return empty string:  string output 
+new string output
+got it
+   Testing 'California' should return aio:  string output Caioia
+new string outputCaio
+don't got it
+   Testing 'BDFHJLNPRTVXBDFHJLNPRTVX' should return the empty string:  string output 
+new string output
+got it
+
+FOUR TESTS FOR reverse():
+   Testing 'xylophones' should return senohpolyx: reverse: senohpolyx
+got it
+   Testing 'XYloPHonES' should return SEnoHPolYX: reverse: SEnoHPolYX
+got it
+   Testing 'AmanAplanAcAnalpAnamA' should return AmanAplanAcAnalpAnamA: reverse: AmanAplanAcAnalpAnamA
+got it
+   Testing 'shut the front door 1234567890' should return 0987654321 rood tnorf eht tuhs: reverse: 0987654321 rood tnorf eht tuhs
+got it
