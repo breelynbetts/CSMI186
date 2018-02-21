@@ -40,8 +40,7 @@ public class Die {
    * @return the pip count of THIS die instance
    */
    public int getValue() {
-     
-      return 0;
+      return pips;
    }
 
   /**
@@ -50,6 +49,11 @@ public class Die {
    * @throws      IllegalArgumentException
    */
    public void setSides( int sides ) {
+     if ( sides < MINIMUM_SIDES ) {
+       throw new IllegalArgumentException( "Illegal number of sides given" );
+     }
+     this.sides = sides;
+     System.out.println("Number of sides" + sides);
    }
 
   /**
@@ -57,7 +61,7 @@ public class Die {
    * @return String representation of this Die
    */
    public String toString() {
-      return "";
+     return "{" + pips + "}";
    }
 
   /**
@@ -65,7 +69,7 @@ public class Die {
    * @return String representation of this Die
    */
    public static String toString( Die d ) {
-      return "";
+      return d.toString();
    }
 
   /**
@@ -73,6 +77,20 @@ public class Die {
    */
    public static void main( String[] args ) {
       System.out.println( "Hello world from the Die class..." );
+
+      Die d = new Die(7);
+      System.out.println("new value = " + d.roll());
+      System.out.println("current value = " + d.getValue());
+      System.out.println("new value = " + d.roll());
+      System.out.println("string value = " + d.toString());
+
+      Die d1 = new Die(12);
+      System.out.println("new value = " + d1.roll());
+      System.out.println("current value = " + d1.getValue());
+      System.out.println("new value = " + d1.roll());
+      System.out.println("string value = " + d1.toString());
+
+
    }
 
 }
