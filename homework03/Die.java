@@ -90,6 +90,12 @@ public class Die {
       System.out.println("new value = " + d1.roll());
       System.out.println("string value = " + d1.toString());
 
+      Die d2 = new Die(2);
+      System.out.println("new value = " + d2.roll());
+      System.out.println("current value = " + d2.getValue());
+      System.out.println("new value = " + d2.roll());
+      System.out.println("string value = " + d2.toString());
+
 
    }
 
