@@ -25,7 +25,7 @@ public class DiceSet {
      if ( sides < 4 ) {
        throw new IllegalArgumentException( "Illegal number of sides given" );
      }
-     for ( int i =0; i < count - 1; i ++ ) {
+     for ( int i = 0; i < count; i++ ) {
        ds[i] = new Die( sides );
      }
    }
@@ -36,7 +36,7 @@ public class DiceSet {
    public int sum() {
      int sum = 0;
      for ( int i = 0; i < count; i++ ) {
-       sum += ds[i].getValue();
+       sum = sum + ds[i].getValue();
      }
       return sum;
    }
@@ -46,8 +46,8 @@ public class DiceSet {
    *  NOTE: you will need to use one of the "toString()" methods to obtain
    *  the values of the dice in the set
    */
-   public void roll() {
-     for ( int i = 0; i < count; i ++ ) {
+   public void rollAll() {
+     for ( int i = 0; i < count; i++ ) {
        ds[i].roll();
      }
    }
@@ -115,6 +115,14 @@ public class DiceSet {
      System.out.println("current value = " + d.rollIndividual(5));
      System.out.println("new value = " + d.getIndividual(3));
      System.out.println("string value = " + d.toString());
+
+     DiceSet d1 = new DiceSet(13,40);
+     System.out.println("sum of the die = " + d1.sum());
+     System.out.println("current value = " + d1.rollIndividual(1));
+     System.out.println("current value = " + d1.rollIndividual(2));
+     System.out.println("current value = " + d1.rollIndividual(5));
+     System.out.println("new value = " + d1.getIndividual(3));
+     System.out.println("string value = " + d1.toString());
 
    }
 
