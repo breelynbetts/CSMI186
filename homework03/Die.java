@@ -20,7 +20,6 @@ public class Die {
      } else
        sides = nSides;
 
-     System.out.println( " Number of sides: " + sides );
    }
 
   /**
@@ -28,7 +27,7 @@ public class Die {
    * @return  integer value of the result of the roll, randomly selected
    */
    public int roll() {
-     pips = (int) (Math.random() * sides + 1);
+     pips = (int) ((Math.random() * sides) + 1);
      return pips;
    }
 
@@ -40,7 +39,7 @@ public class Die {
    * @return the pip count of THIS die instance
    */
    public int getValue() {
-      return pips;
+      return this.pips;
    }
 
   /**
@@ -53,7 +52,7 @@ public class Die {
        throw new IllegalArgumentException( "Illegal number of sides given" );
      }
      this.sides = sides;
-     System.out.println("Number of sides" + sides);
+     System.out.println("New number of sides" + sides);
    }
 
   /**
@@ -61,7 +60,7 @@ public class Die {
    * @return String representation of this Die
    */
    public String toString() {
-     return "{" + pips + "}";
+     return "{" + this.pips + "}";
    }
 
   /**
@@ -90,7 +89,7 @@ public class Die {
       System.out.println("new value = " + d1.roll());
       System.out.println("string value = " + d1.toString());
 
-      Die d2 = new Die(2);
+      Die d2 = new Die(6);
       System.out.println("new value = " + d2.roll());
       System.out.println("current value = " + d2.getValue());
       System.out.println("new value = " + d2.roll());
