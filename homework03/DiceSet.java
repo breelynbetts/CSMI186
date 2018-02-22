@@ -15,10 +15,10 @@ public class DiceSet {
    * @throws IllegalArgumentException if one or both arguments don't make sense
    * @note   parameters are checked for validity; invalid values throw "IllegalArgumentException"
    */
-   public DiceSet( int count, int sides ) {
-     this.count = count;
-
-     this.sides = sides;
+   public DiceSet( int nCount, int nSides ) {
+     count = nCount;
+     ds = new Die[count];
+     sides = nSides;
      if ( count < 1 ) {
        throw new IllegalArgumentException( "Invalid number of dice given" );
      }
@@ -35,7 +35,7 @@ public class DiceSet {
    */
    public int sum() {
      int sum = 0;
-     for ( int i = 0; i < count -1; i++ ) {
+     for ( int i = 0; i < count; i++ ) {
        sum += ds[i].getValue();
      }
       return sum;
@@ -47,7 +47,7 @@ public class DiceSet {
    *  the values of the dice in the set
    */
    public void roll() {
-     for ( int i =0; i < count - 1; i ++ ) {
+     for ( int i = 0; i < count; i ++ ) {
        ds[i].roll();
      }
    }
@@ -68,6 +68,9 @@ public class DiceSet {
    * @trhows IllegalArgumentException if the index is out of range
    */
    public int getIndividual( int dieIndex ) {
+      if (dieIndex > this.count - 1) {
+        throw new IllegalArgumentException("Value given is not contained in the Index");
+      }
       return ds[dieIndex].getValue();
    }
 
@@ -76,7 +79,7 @@ public class DiceSet {
    */
    public String toString() {
      String output = "";
-     for ( int i =0; i < count - 1; i ++ ) {
+     for ( int i =0; i < count; i ++ ) {
        output += ds[i].toString();
      }
      return output;
@@ -93,9 +96,7 @@ public class DiceSet {
    * @return  tru iff this set is identical to the set passed as an argument
    */
    public boolean isIdentical( DiceSet ds ) {
-      if (count == ds.count ) {
-        return true;
-      } else if (sides == ds.sides) {
+      if ( count == ds.count && sides == ds.sides ) {
         return true;
       }
       return false;
@@ -105,6 +106,15 @@ public class DiceSet {
    * A little test main to check things out
    */
    public static void main( String[] args ) {
+     System.out.println("Test Cases for DiceSet.java");
+
+     DiceSet d = new DiceSet(6,8);
+     System.out.println("sum of the die = " + d.sum());
+     System.out.println("current value = " + d.rollIndividual(1));
+     System.out.println("current value = " + d.rollIndividual(2));
+     System.out.println("current value = " + d.rollIndividual(5));
+     System.out.println("new value = " + d.getIndividual(3));
+     System.out.println("string value = " + d.toString());
 
    }
 
