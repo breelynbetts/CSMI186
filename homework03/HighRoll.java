@@ -4,55 +4,63 @@ import java.io.IOException;
 
 public class HighRoll {
 
-  static int highValue = 0;
   static DiceSet ds = null;
+  static int highValue = 0;
 
-   public static void main( String args[] ) {
-      ds = new DiceSet( Integer.parseInt(args[0]), Integer.parseInt(args[1]));
-      System.out.println( "\n   Welcome to the MainProgLoopDemo!!\n" );
-      System.out.println( "     Press the 'q' key to quit the program." );
+   public static void main( String[] args ) {
+     if( 0 == args.length ) {
+        System.out.println("USAGE: java HighRoll #unknown-channel #unknown-channel");
+        System.exit(-1);
+     }
 
-     // This line uses the two classes to assemble an "input stream" for the user to type
-     // text into the program
-      BufferedReader input = new BufferedReader( new InputStreamReader( System.in ) );
-      while( true ) {
+     ds = new DiceSet( Integer.parseInt(args[0]), Integer.parseInt(args[1]) );
+
+
+     while( true ) {
+         System.out.print("1. select to roll all dice in set\n" +
+            "2. select to roll a single die\n" +
+            "3. select to calculate your sum\n" +
+            "4. select to save your sum as a high score\n" +
+            "5. select to display the high score\n" +
+            "q. select to quit the program");
          System.out.print( ">>" );
+
+         BufferedReader input = new BufferedReader( new InputStreamReader( System.in ) );
+
          String inputLine = null;
-         try {
-            inputLine = input.readLine();
-            switch (inputLine.charAt(0)) {
-              case '1': ds.roll();
-                        System.out.println("");
-                        break;
-              case '2': System.out.println( "Which die would you like to roll?" );
-                        ds.getIndividual( Integer.parseInt( input.readLine() ) - 1);
-                        System.out.println("The die: " + input.readLine() + "rolled");
-                        break;
-              case '3': ds.sum();
-                        System.out.println("");
-                        break;
-              case '4': highValue = ds.sum();
-                        System.out.println("");
-                        break;
-              case '5': System.out.println(" high score = " + highValue);
-                        break;
-              case 'q': System.exit(0);
-                        System.out.println("Thank you for playing.");
-                        break;
-              default: System.out.println( "Invalid Entry" );
-            }
-            if( 0 == inputLine.length() ) {
-               System.out.println("enter some text!:");
-            }
-            System.out.println( "   You typed: " + inputLine );
+           try {
 
-            if( 'q' == inputLine.charAt(0) ) {
-               break;
-            }
+              inputLine = input.readLine();
 
-         }
-         catch( IOException ioe ) {
-            System.out.println( "Caught IOException" );
+              if ( 0 == inputLine.length() ) {
+                System.out.println( "Enter some text please!" );
+              }
+              switch (inputLine.charAt(0)) {
+                case '1': ds.roll();
+                          System.out.println(ds.toString());
+                          break;
+                case '2': System.out.println( "Which die would you like to roll?" );
+                          inputLine = input.readLine();
+                          System.out.println(ds.rollIndividual( Integer.parseInt(inputLine) - 1));
+                          System.out.println(ds.toString());
+                          break;
+                case '3': ds.sum();
+                          System.out.println(ds.toString());
+                          break;
+                case '4': highValue = ds.sum();
+                          System.out.println(ds.toString());
+                          break;
+                case '5': System.out.println(" Your high score = " + highValue);
+                          System.out.println(ds.toString());
+                          break;
+                case 'q': System.exit(0);
+                          break;
+                default: System.out.println( "Invalid Entry" );
+              }
+
+          }
+          catch( IOException ioe ) {
+              System.out.println( "Caught IOException" );
          }
       }
    }
