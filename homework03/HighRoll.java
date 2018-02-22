@@ -36,7 +36,7 @@ public class HighRoll {
                 System.out.println( "Enter some text please!" );
               }
               switch (inputLine.charAt(0)) {
-                case '1': ds.roll();
+                case '1': ds.rollAll();
                           System.out.println(ds.toString());
                           break;
                 case '2': System.out.println( "Which die would you like to roll?" );
