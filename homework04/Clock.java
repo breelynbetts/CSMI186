@@ -18,6 +18,9 @@ public class Clock {
    private static final double MAXIMUM_NUMBER_OF_SECONDS = 43200;
    private double totalSeconds = 0;
    private double timeSlice = 0;
+   private double hourHandAngle;
+   private double minuteHandAngle;
+   private double degrees;
 
   /**
    *  Constructor goes here
@@ -26,9 +29,9 @@ public class Clock {
 
    }
 
-   public double getTotalSeconds2() {
-     return totalSeconds;
-   }
+  //  public double getTotalSeconds2() {
+  //    return totalSeconds;
+  //  }
 
   /**
    *  Methods go here
@@ -82,7 +85,8 @@ public class Clock {
    *  @return double-precision value of the hour hand location
    */
    public double getHourHandAngle() {
-      double hourHandAngle = HOUR_HAND_DEGREES_PER_SECOND * this.tick;
+      this.totalSeconds = totalSeconds;
+      double hourHandAngle = HOUR_HAND_DEGREES_PER_SECOND * totalSeconds;
       return hourHandAngle;
    }
 
@@ -91,7 +95,8 @@ public class Clock {
    *  @return double-precision value of the minute hand location
    */
    public double getMinuteHandAngle() {
-      double minuteHandAngle = MINUTE_HAND_DEGREES_PER_SECOND * this.tick;
+      this.totalSeconds = totalSeconds;
+      double minuteHandAngle = MINUTE_HAND_DEGREES_PER_SECOND * totalSeconds;
       return minuteHandAngle;
    }
 
@@ -100,7 +105,10 @@ public class Clock {
    *  @return double-precision value of the angle between the two hands
    */
    public double getHandAngle() {
-      return 0.0;
+      hourHandAngle = this.hourHandAngle;
+      minuteHandAngle = this.minuteHandAngle;
+      degrees = Math.abs(((hourHandAngle * 30) + (minuteHandAngle * 0.5)) - (minuteHandAngle * 6) );
+      return Math.min(360 - degrees, degrees);
    }
 
   /**
@@ -110,7 +118,7 @@ public class Clock {
    */
    public double getTotalSeconds() {
      // something to do with tick()
-      return 0.0;
+      return totalSeconds;
    }
 
   /**
@@ -118,7 +126,7 @@ public class Clock {
    *  @return String value of the current clock
    */
    public String toString() {
-      return "(" + this.getHourHandAngle + "," + this.getMinuteHandAngle + ")";
+      return "(" + this.hourHandAngle + "," + this.minuteHandAngle + ")";
    }
 
   /**
@@ -133,7 +141,7 @@ public class Clock {
       System.out.println( "\nCLOCK CLASS TESTER PROGRAM\n" +
                           "--------------------------\n" );
       System.out.println( "  Creating a new clock: " );
-      ClockEmpty clock = new Clock();
+      Clock clock = new Clock();
       System.out.println( "    New clock created: " + clock.toString() );
       System.out.println( "    Testing validateAngleArg()....");
       System.out.print( "      sending '  0 degrees', expecting double value   0.0" );
