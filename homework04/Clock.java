@@ -6,6 +6,7 @@
  *  Description   :  This class provides a bunch of methods which may be useful for the ClockSolver class
  *                   for Homework 4, part 1.  Includes the following:
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+import java.text.DecimalFormat;
 
 public class Clock {
 
@@ -16,26 +17,27 @@ public class Clock {
    private static final double MINUTE_HAND_DEGREES_PER_SECOND = 0.1;
 
    private static final double MAXIMUM_NUMBER_OF_SECONDS = 43200;
-   private double totalSeconds = 0;
-   private double timeSlice = 0;
+   private static double totalSeconds = 0;
+   private static double timeSlice = 0;
+   private double targetAngle = 0;
    private double hourHandAngle;
    private double minuteHandAngle;
    private double degrees;
+   private double hourHand = 0;
+   private double minuteHand = 0;
+   private double seconds = 0;
 
   /**
    *  Constructor goes here
    */
    public Clock() {
-
    }
 
-  //  public double getTotalSeconds2() {
-  //    return totalSeconds;
-  //  }
+   public Clock(double t) {
+     timeSlice = t;
+   }
 
   /**
-   *  Methods go here
-   *
    *  Method to calculate the next tick from the time increment
    *  @return double-precision value of the current clock tick
    */
@@ -51,8 +53,11 @@ public class Clock {
    *  @throws  NumberFormatException
    */
    public double validateAngleArg( String argValue ) throws NumberFormatException {
-      double argVal = Double.parseDouble(argValue);
-      return argVal;
+      double targetAngle = Double.parseDouble(argValue);
+      if ( argValue.length() == 0 || targetAngle < 0 || targetAngle > 360 ) {
+        throw new NumberFormatException("Invalid arguments entered");
+      }
+      return targetAngle;
    }
 
   /**
@@ -67,17 +72,11 @@ public class Clock {
    *         to take a VERY LONG TIME to complete!
    */
    public double validateTimeSliceArg( String argValue ) {
-     // how does it tell the different between the two same variables ???
-     // do we need to use argVal2[1] ??
-      double argVal2 = Double.parseDouble(argValue);
-      if (argValue.length() == 0) {
-        return DEFAULT_TIME_SLICE_IN_SECONDS;
-      } else if ( argVal2 >= MAXIMUM_DEGREE_VALUE ) {
-        return -1;
-      } else if ( argVal2 == 0 ) {
-        return -1;
-      }
-      return argVal2;
+     double timeslice = Double.parseDouble(argValue);
+       if (timeslice < 0 || timeslice > 1800) {
+           throw new NumberFormatException("You entered invalid arguments");
+       }
+       return timeslice;
    }
 
   /**
@@ -85,8 +84,7 @@ public class Clock {
    *  @return double-precision value of the hour hand location
    */
    public double getHourHandAngle() {
-      this.totalSeconds = totalSeconds;
-      double hourHandAngle = HOUR_HAND_DEGREES_PER_SECOND * totalSeconds;
+      double hourHandAngle = ( HOUR_HAND_DEGREES_PER_SECOND * seconds ) % 360;
       return hourHandAngle;
    }
 
@@ -95,8 +93,7 @@ public class Clock {
    *  @return double-precision value of the minute hand location
    */
    public double getMinuteHandAngle() {
-      this.totalSeconds = totalSeconds;
-      double minuteHandAngle = MINUTE_HAND_DEGREES_PER_SECOND * totalSeconds;
+      double minuteHandAngle = ( MINUTE_HAND_DEGREES_PER_SECOND * seconds ) % 360;
       return minuteHandAngle;
    }
 
@@ -105,10 +102,11 @@ public class Clock {
    *  @return double-precision value of the angle between the two hands
    */
    public double getHandAngle() {
-      hourHandAngle = this.hourHandAngle;
-      minuteHandAngle = this.minuteHandAngle;
-      degrees = Math.abs(((hourHandAngle * 30) + (minuteHandAngle * 0.5)) - (minuteHandAngle * 6) );
-      return Math.min(360 - degrees, degrees);
+      double angleFinal = Math.abs( getHourHandAngle() - getMinuteHandAngle() ) % 360;
+      if ( angleFinal > 180 ) {
+        return 360 - angleFinal;
+      }
+      return angleFinal;
    }
 
   /**
@@ -117,7 +115,6 @@ public class Clock {
    *  @return double-precision value the total seconds private variable
    */
    public double getTotalSeconds() {
-     // something to do with tick()
       return totalSeconds;
    }
 
@@ -126,7 +123,11 @@ public class Clock {
    *  @return String value of the current clock
    */
    public String toString() {
-      return "(" + this.hourHandAngle + "," + this.minuteHandAngle + ")";
+     hourHand = Math.floor( totalSeconds / 3600);
+     minuteHand = Math.floor((totalSeconds % 3600) / 60);
+     seconds = totalSeconds - ((hourHand * 3600) + (minuteHand * 60));
+     DecimalFormat df = new DecimalFormat("#.00");
+     return (int) hourHand + ":" + (int) minuteHand + ":" + df.format(seconds);
    }
 
   /**
@@ -141,11 +142,45 @@ public class Clock {
       System.out.println( "\nCLOCK CLASS TESTER PROGRAM\n" +
                           "--------------------------\n" );
       System.out.println( "  Creating a new clock: " );
-      Clock clock = new Clock();
-      System.out.println( "    New clock created: " + clock.toString() );
+      Clock clock2 = new Clock();
+      System.out.println( "    New clock created: " + clock2.toString() );
       System.out.println( "    Testing validateAngleArg()....");
       System.out.print( "      sending '  0 degrees', expecting double value   0.0" );
-      try { System.out.println( (0.0 == clock.validateAngleArg( "0.0" )) ? " - got 0.0" : " - no joy" ); }
+      try { System.out.println( (0.0 == clock2.validateAngleArg( "0.0" )) ? " - got 0.0" : " - no joy" ); }
       catch( Exception e ) { System.out.println ( " - Exception thrown: " + e.toString() ); }
+
+      Clock c = new Clock();
+      timeSlice = 10;
+      System.out.println(c.getTotalSeconds());
+      System.out.println(c.tick());
+      System.out.println(c.tick());
+      System.out.println(c.tick());
+      System.out.println(c.tick());
+      System.out.println(c.tick());
+      System.out.println(c.tick());
+      System.out.println(c.tick());
+      System.out.println(c.getTotalSeconds());
+      totalSeconds = 3601;
+      System.out.println(c.getHourHandAngle());
+      System.out.println(c.getMinuteHandAngle());
+      System.out.println(c.getHandAngle());
+
+      Clock c2 = new Clock();
+      totalSeconds = 0;
+      timeSlice = 30;
+      System.out.println(c2.getTotalSeconds());
+      System.out.println(c2.tick());
+      System.out.println(c2.tick());
+      System.out.println(c2.tick());
+      System.out.println(c2.tick());
+      System.out.println(c2.tick());
+      System.out.println(c2.tick());
+      System.out.println(c2.tick());
+      System.out.println(c2.getTotalSeconds());
+      totalSeconds = MAXIMUM_NUMBER_OF_SECONDS;
+      System.out.println(c2.getHourHandAngle());
+      System.out.println(c2.getMinuteHandAngle());
+      System.out.println(c2.getHandAngle());
+
    }
 }
