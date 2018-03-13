@@ -13,7 +13,6 @@ public class ClockSolver {
    private final double DEFAULT_TIME_SLICE_SECONDS = 60.0;
    private final static double EPSILON_VALUE       = 0.1;      // small value for double-precision comparisons
    private static final double MAXIMUM_NUMBER_OF_SECONDS = 43200;
-
    private static double targetAngle = 0;
    private static double timeSlice = 0;
 
@@ -44,10 +43,11 @@ public class ClockSolver {
       }
       Clock clock = new Clock();
       if ( 1 == args.length ) {
-        clock.validateAngleArg(args[0]);
+        targetAngle = Double.parseDouble(args[0]);
+        timeSlice = DEFAULT_TIME_SLICE_SECONDS;
       } else if ( 2 == args.length ) {
-        clock.validateAngleArg(args[0]);
-        clock.validateTimeSliceArg(args[1]);
+        targetAngle = Double.parseDouble( args[0] );
+        timeSlice = Double.parseDouble( args[1] );
       }
 
    }
@@ -62,21 +62,19 @@ public class ClockSolver {
    */
    public static void main( String args[] ) {
       ClockSolver cse = new ClockSolver();
+      double[] timeValues = new double[3];
       cse.handleInitialArguments( args );
-      cse.targetAngle = Double.parseDouble(args[0]);
-      if ( args.length == 2 ) {
-        cse.timeSlice = Double.parseDouble(args[1]);
-      } else {
-        cse.timeSlice = 60.0;
-      }
-      Clock clock     = new Clock(cse.timeSlice);
-      while( clock.getTotalSeconds() <= MAXIMUM_NUMBER_OF_SECONDS ) {
-        clock.tick();
-        if ( Math.abs((clock.getHandAngle() - targetAngle )) <= EPSILON_VALUE )  {
-          System.out.println( clock.toString());
-        }
-        System.exit( 0 );
-      }
+      Clock clock = new Clock ( cse.targetAngle, cse.timeSlice );
 
+
+      while( clock.getTotalSeconds() <= 43200 ) {
+
+        if ( cse.targetAngle - clock.getHandAngle() <= EPSILON_VALUE )  {
+          System.out.println( clock.toString() );
+        }
+        clock.tick();
+
+      }
+      System.exit( 0 );
    }
 }
