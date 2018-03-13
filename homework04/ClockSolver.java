@@ -65,15 +65,11 @@ public class ClockSolver {
       double[] timeValues = new double[3];
       cse.handleInitialArguments( args );
       Clock clock = new Clock ( cse.targetAngle, cse.timeSlice );
-
-
       while( clock.getTotalSeconds() <= 43200 ) {
-
         if ( cse.targetAngle - clock.getHandAngle() <= EPSILON_VALUE )  {
           System.out.println( clock.toString() );
         }
         clock.tick();
-
       }
       System.exit( 0 );
    }
