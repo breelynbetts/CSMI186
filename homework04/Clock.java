@@ -33,8 +33,9 @@ public class Clock {
    public Clock() {
    }
 
-   public Clock(double t) {
+   public Clock(double a, double t) {
      timeSlice = t;
+     targetAngle = a % 360;
    }
 
   /**
@@ -84,7 +85,7 @@ public class Clock {
    *  @return double-precision value of the hour hand location
    */
    public double getHourHandAngle() {
-      double hourHandAngle = ( HOUR_HAND_DEGREES_PER_SECOND * seconds ) % 360;
+      double hourHandAngle =  HOUR_HAND_DEGREES_PER_SECOND * totalSeconds ;
       return hourHandAngle;
    }
 
@@ -93,7 +94,7 @@ public class Clock {
    *  @return double-precision value of the minute hand location
    */
    public double getMinuteHandAngle() {
-      double minuteHandAngle = ( MINUTE_HAND_DEGREES_PER_SECOND * seconds ) % 360;
+      double minuteHandAngle =  MINUTE_HAND_DEGREES_PER_SECOND * totalSeconds ;
       return minuteHandAngle;
    }
 
