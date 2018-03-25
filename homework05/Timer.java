@@ -1,15 +1,20 @@
 /** ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- *  File Name     :
- *  Purpose       :
+ *  File Name     : Timer.java
+ *  Purpose       : Provides a class defining methods for SoccerSim class
  *  @author       : Breelyn Betts
- *  Date written  :
- *
+ *  Date written  : 2018 - 03 - 17
+ *  Description   :
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+import java.text.DecimalFormat;
+
 public class Timer {
 
   private static final double DEFAULT_TIME_SLICE_IN_SECONDS = 1.0;
   private static double totalSeconds = 0;
   private static double timeSlice = 0;
+  private double hours = 0;
+  private double minutes = 0;
+  private double seconds = 0;
 
   public Timer() {
 
@@ -29,13 +34,20 @@ public class Timer {
    * @return double-precision value of the argument or -1.0 if invalid
    * @throws NumberFormatException
    */
-  public double validateTimeSliceArg(String argValue) throws NumberFormatException {
-    double timeSlice = Double.parseDouble(argValue);
-      if ( timeSlice < 0 || timeSlice > 1800 ) {
-        throw new NumberFormatException("You entered invalid arguments");
+  public double validateTimeSliceArg(String argValue) throws NumberFormatException,
+                                                             IllegalArgumentException {
+      double returnValue = 0.0;
+      try {
+         returnValue = Double.parseDouble( argValue );
       }
-    return timeSlice;
-  }
+      catch( NumberFormatException nfe ) {
+         throw new NumberFormatException( " [converting time slice value failed]");
+      }
+      if( (0.0 >= returnValue) || (1800.0 < returnValue) ) {
+         throw new IllegalArgumentException( " [time slice value out of range]" );
+      }
+      return returnValue;
+   }
 
 
 
@@ -44,7 +56,12 @@ public class Timer {
   }
 
   public String toString() {
-    return "" + totalSeconds;
+    DecimalFormat df = new DecimalFormat("#.000");
+    DecimalFormat dfi = new DecimalFormat("#0");
+    hours = Math.floor( totalSeconds / 3600);
+    minutes = Math.floor((totalSeconds % 3600) / 60);
+    seconds = totalSeconds - ((hours * 3600) + (minutes * 60));
+    return dfi.format(hours) + ":" + dfi.format(minutes) + ":" + df.format(seconds);
   }
 
 }
