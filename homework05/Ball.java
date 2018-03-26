@@ -9,76 +9,68 @@ import java.text.DecimalFormat;
 
 public class Ball {
 
-  public static final double MAXIMUM_VALUE_OF_X = 300;
-  public static final double MINIMUM_VALUE_OF_X = -300;
-  public static final double MAXIMUM_VALUE_OF_Y = 300;
-  public static final double MINIMUM_VALUE_OF_Y = -300;
-  private double RADIUS_IN_INCHES = 4.45;
-  private double WEIGHT_IN_POUNDS = 1;
+    private final static double DEFAULT_TIME_SLICE_IN_SECONDS = 1.0;
+    private double xLocation;
+    private double yLocation;
+    private double xVel;
+    private double yVel;
+    private double timeSlice;
 
-  private double xPosition = 0;
-  private double yPosition = 0;
-  private double xVelocity = 0;
-  private double yVelocity = 0;
-  private double timeSlice = 0;
-
-
-
-  public Ball() {
-
-  }
-
-  public Ball( double x, double y, double xv, double yv, double ts) {
-    xPosition = x;
-    yPosition = y;
-    xVelocity = xv;
-    yVelocity = yv;
-    timeSlice = ts;
-  }
-
-  public double[] getLocation() {
-    double [] location = new double[2];
-    location[0] = xPosition;
-    location[1] = yPosition;
-    return location;
-  }
-
-  public double[] getVelocity() {
-    double [] velocity = new double[2];
-    velocity[0] = xVelocity;
-    velocity[1] = yVelocity;
-    return velocity;
-  }
-
-  public void friction() {
-    this.xVelocity = xVelocity - ( (xVelocity * 0.01) * timeSlice );
-    this.yVelocity = yVelocity - ( (yVelocity * 0.01) * timeSlice );
-  }
-
-  public double[] move() {
-    double [] move = new double [2];
-    move[0] = xPosition + xVelocity;
-    move[1] = yPosition + yVelocity;
-    friction();
-    return move;
-
-  }
-
-
-  public boolean isMoving() {
-    return ( xVelocity > 1 )|| ( yVelocity > 1 );
-  }
-
-  public boolean isOnField( ) {
-    if (Math.abs(xPosition) <= (MAXIMUM_VALUE_OF_X) && Math.abs(yPosition) <= (MAXIMUM_VALUE_OF_Y)) {
-      return true;
+    public Ball() {
+        timeSlice = DEFAULT_TIME_SLICE_IN_SECONDS;
     }
-    return false;
-  }
 
-  public String toString() {
-    DecimalFormat df = new DecimalFormat("#0.000");
-    String ball = "<" + df.format(xPosition) + "," + df.format(yPosition) + ">" + "<" + df.format(xVelocity) + "," + df.format(yVelocity) + ">";
-    return ball;
-  }
+    public Ball(double x, double y, double z, double w, double t) {
+        xLocation = x;
+        yLocation = y;
+        xVel = z;
+        yVel = w;
+        timeSlice = t;
+    }
+
+    //methods start here!
+    public double[] getLocation() {
+        double [] location = new double[2];
+        location[0] = xLocation;
+        location[1] = yLocation;
+        return location;
+    }
+
+    public double[] getVelocity () {
+        double [] velocity = new double[2];
+        velocity[0] = xVel;
+        velocity[1] = yVel;
+        return velocity;
+    }
+
+    public void friction() {
+        this.xVel *= Math.pow(0.99, timeSlice);
+        this.yVel *= Math.pow(0.99, timeSlice);
+    }
+
+    public double [] move (){
+        double [] moving = new double [2];
+        moving[0] = xLocation + xVel;
+        moving[1] = yLocation + yVel;
+        friction();
+        return moving;
+    }
+
+    public boolean isMoving() {
+        return (Math.sqrt((Math.pow((xVel * 12), 2))+(Math.pow((yVel * 12), 2)))) > 1.0;
+    }
+
+    public boolean isOnField(double fieldX, double fieldY) {
+        if((Math.abs(xLocation) <= (fieldX/2)) && (Math.abs(yLocation) <= (fieldY/2))){
+            return true;
+        }
+        return false;
+    }
+
+    public String toString() {
+        DecimalFormat df = new DecimalFormat("#0.000");
+        String ball= "<" + df.format(xLocation) + "," + df.format(yLocation) + ">" + "<" + df.format(xVel) + "," + df.format(yVel) + ">";
+        return ball;
+    }
+
 }
