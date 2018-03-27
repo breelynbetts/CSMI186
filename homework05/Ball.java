@@ -10,21 +10,15 @@ import java.text.DecimalFormat;
 public class Ball {
 
     private final static double DEFAULT_TIME_SLICE_IN_SECONDS = 1.0;
-    private double xLocation;
-    private double yLocation;
-    private double xVel;
-    private double yVel;
+    public double xLocation;
+    public double yLocation;
+    public double xVel;
+    public double yVel;
     private double timeSlice;
 
-    public Ball() {
-        timeSlice = DEFAULT_TIME_SLICE_IN_SECONDS;
-    }
 
-    public Ball(double x, double y, double z, double w, double t) {
-        xLocation = x;
-        yLocation = y;
-        xVel = z;
-        yVel = w;
+    public Ball(double t) {
+
         timeSlice = t;
     }
 
@@ -57,7 +51,10 @@ public class Ball {
     }
 
     public boolean isMoving() {
-        return (Math.sqrt((Math.pow((xVel * 12), 2))+(Math.pow((yVel * 12), 2)))) > 1.0;
+        if ( xVel < (1 / 12) || yVel < ( 1 / 12 )) {
+          return false;
+        }
+        return true;
     }
 
     public boolean isOnField(double fieldX, double fieldY) {

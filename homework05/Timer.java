@@ -56,7 +56,7 @@ public class Timer {
   }
 
   public String toString() {
-    DecimalFormat df = new DecimalFormat("#.000");
+    DecimalFormat df = new DecimalFormat("#0.000");
     DecimalFormat dfi = new DecimalFormat("#0");
     hours = Math.floor( totalSeconds / 3600);
     minutes = Math.floor((totalSeconds % 3600) / 60);
