@@ -24,14 +24,14 @@ public class Ball {
 
     //methods start here!
     public double[] getLocation() {
-        double [] location = new double[2];
+        double[] location = new double[2];
         location[0] = xLocation;
         location[1] = yLocation;
         return location;
     }
 
     public double[] getVelocity () {
-        double [] velocity = new double[2];
+        double[] velocity = new double[2];
         velocity[0] = xVel;
         velocity[1] = yVel;
         return velocity;
@@ -42,19 +42,21 @@ public class Ball {
         this.yVel *= Math.pow(0.99, timeSlice);
     }
 
-    public double [] move (){
-        double [] moving = new double [2];
-        moving[0] = xLocation + xVel;
-        moving[1] = yLocation + yVel;
+    public double [] move() {
+        double[] moving = new double [2];
+        xLocation = xLocation + xVel;
+        yLocation = yLocation + yVel;
+        moving[0] = xLocation;
+        moving[1] = yLocation;
         friction();
         return moving;
     }
 
     public boolean isMoving() {
-        if ( xVel < (1 / 12) || yVel < ( 1 / 12 )) {
-          return false;
+        if ( !(xVel < (1 / 12)) || !(yVel < ( 1 / 12 ))) {
+          return true;
         }
-        return true;
+        return false;
     }
 
     public boolean isOnField(double fieldX, double fieldY) {

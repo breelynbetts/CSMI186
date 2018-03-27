@@ -62,7 +62,7 @@ import java.text.DecimalFormat;
      }
      public boolean isMovement() {
        for (int i = 0 ; i < ballQuantity; i++) {
-         if (balls[i].xVel != 0.0 || balls[i].yVel != 0.0 ) {
+         if (!(balls[i].xVel < 0.000001 && balls[i].yVel < 0.000001)) {
            return true;
          }
        }
@@ -71,7 +71,7 @@ import java.text.DecimalFormat;
 
      public boolean isOnField() {
        for (int i =0 ; i < ballQuantity; i++) {
-         if (balls[i].xLocation > (fieldX / 2) || balls[i].yLocation > (fieldY / 2 )) {
+         if (balls[i].xLocation < (fieldX / 2) || balls[i].yLocation < (fieldY / 2 )) {
            return true;
          }
        }
@@ -142,14 +142,14 @@ import java.text.DecimalFormat;
           System.out.println("Pole is located at (" + poleX + "," + poleY + ")\n");
 
 
-       while ( ss.isMovement()  ) {
+       while ( ss.isMovement() && ss.isOnField()) {
          System.out.println(timer.tick());
          System.out.println("PROGRESS REPORT at" + timer.toString());
 
          for ( int i = 0; i < ballQuantity; i++ ) {
            balls[i].move();
            System.out.println( i + "position <" + df.format(balls[i].getLocation()[0]) + "," + df.format(balls[i].move()[1]) + ">");
-            if(balls[i].isMoving()) {
+            if(!(balls[i].xVel < 0.000001 && balls[i].yVel < 0.000001))  {
                 System.out.println( i + "velocity <" + df.format(balls[i].xVel) + "," + df.format(balls[i].yVel) + ">");
             }
             else {
