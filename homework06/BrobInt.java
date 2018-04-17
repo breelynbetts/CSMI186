@@ -1,3 +1,10 @@
+/** ---------------------------------------------------------------------------
+ *  File name    : BrobInt.java
+ *  @author      : Breelyn Betts
+ *  Purpose      : Program that performs various operations on arbitrarily large numbers
+ *  Date         : 04 - 03 - 18
+ * ---------------------------------------------------------------------------- */
+
 import java.util.Arrays;
 
 public class BrobInt {
@@ -14,18 +21,19 @@ public class BrobInt {
    public static final BrobInt NINE     = new BrobInt(  "9" );      /// Constant for "nine"
    public static final BrobInt TEN      = new BrobInt( "10" );      /// Constant for "ten"
 
-  /// Some constants for other intrinsic data types
-  ///  these can help speed up the math if they fit into the proper memory space
+
    public static final BrobInt MAX_INT  = new BrobInt( new Integer( Integer.MAX_VALUE ).toString() );
    public static final BrobInt MIN_INT  = new BrobInt( new Integer( Integer.MIN_VALUE ).toString() );
    public static final BrobInt MAX_LONG = new BrobInt( new Long( Long.MAX_VALUE ).toString() );
    public static final BrobInt MIN_LONG = new BrobInt( new Long( Long.MIN_VALUE ).toString() );
 
-  /// These are the internal fields
+
    private String internalValue = "";        // internal String representation of this BrobInt
    private byte   sign          = 0;         // "0" is positive, "1" is negative
    private String reversed      = "";        // the backwards version of the internal String representation
-   private byte[] byteVersion   = null;      // byte array for storing the string values; uses the reversed string
+   private int[] intVersion     = null;      // int array for storing the string values; uses the reversed string
+   private int[] longerValue    = null;
+   private int[] shorterValue   = null;
 
   /**
    *  Constructor takes a string and assigns it to the internal storage, checks for a sign character
@@ -34,7 +42,22 @@ public class BrobInt {
    *  @param  value  String value to make into a BrobInt
    */
    public BrobInt( String value ) {
-      super();
+      String val = value.trim();
+      internalValue = value;
+      reversed = new StringBuffer(internalValue).reverse().toString();
+      int[] intVersion = new int[str.length];
+      for ( int i = 0; i < reversed.length; i++ ) {
+        intVersion[i] = Integer.parseInt( "" + reversed.charAt(i) );
+      }
+      if ( reversed.charAt( internalValue.length() - 1) == '-' ) {
+        sign = 0;
+      }
+      // how do we account for if positive is not specified ???
+      else if ( reversed.charAt( internalValue.length() - 1) == '+') {
+        sign = 1;
+      }
+
+
    }
 
   /** ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -45,8 +68,12 @@ public class BrobInt {
    *  note also that this must check for the '+' and '-' sign digits
    *  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
    public boolean validateDigits() {
-      if ( ) {
-        throw new UnsupportedOperationException( "\n         Sorry, that operation is not yet implemented." );
+      String digits = "+-123456789";
+      for ( int i = 0 ; i < internalValue.length(); i++ ) {
+        if ( !digits.contains("" + internalValue.charAt(i)) ) {
+          throw new NumberFormatException("Invalid argument given, number must be a number");
+          return false;
+        }
       }
       return true;
    }
@@ -56,8 +83,7 @@ public class BrobInt {
    *  @return BrobInt that is the reverse of the value of this BrobInt
    *  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
    public BrobInt reverser() {
-      String reverse = ""; 
-      throw new UnsupportedOperationException( "\n         Sorry, that operation is not yet implemented." );
+      reversed = new StringBuffer(internalValue).reverse().toString();
    }
 
   /** ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -67,16 +93,7 @@ public class BrobInt {
    *  @return BrobInt that is the reverse of the value of the BrobInt passed as argument
    *  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
    public static BrobInt reverser( BrobInt gint ) {
-      throw new UnsupportedOperationException( "\n         Sorry, that operation is not yet implemented." );
-   }
-
-  /** ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   *  Method to add the value of a BrobIntk passed as argument to this BrobInt using byte array
-   *  @param  gint         BrobInt to add to this
-   *  @return BrobInt that is the sum of the value of this BrobInt and the one passed in
-   *  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-   public BrobInt addByte( BrobInt gint ) {
-      throw new UnsupportedOperationException( "\n         Sorry, that operation is not yet implemented." );
+      return gint.reverser();
    }
 
   /** ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -85,17 +102,31 @@ public class BrobInt {
    *  @return BrobInt that is the sum of the value of this BrobInt and the one passed in
    *  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
    public BrobInt addInt( BrobInt gint ) {
-      throw new UnsupportedOperationException( "\n         Sorry, that operation is not yet implemented." );
+      if ( internalValue.length >= gint.length ) {
+        longerValue = intVersion[];
+        shorterValue = gint;
+      } else if ( internalValue.length < gint.length ) {
+        longerValue = gint;
+        shorterValue = intVersion[];
+      }
+      int carry = 0;
+      int[] result = new int[ longerValue.length + 1 ];
+
+// should intVersion be replaced with longerValue ??
+
+      for ( int i = 0; i < intVersion.length; i++ ) {
+        result[i] = intVersion[i] + gint.intVersion[i] + carry;
+        if ( result[i] > 9 ) {
+          result[i] -= 10;
+          carry = 1;
+        } else {
+          carry = 0;
+        }
+      }
+
+      return new BrobInt(result);
    }
 
-  /** ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   *  Method to subtract the value of a BrobIntk passed as argument to this BrobInt using bytes
-   *  @param  gint         BrobInt to subtract from this
-   *  @return BrobInt that is the difference of the value of this BrobInt and the one passed in
-   *  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-   public BrobInt subtractByte( BrobInt gint ) {
-      throw new UnsupportedOperationException( "\n         Sorry, that operation is not yet implemented." );
-   }
 
   /** ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    *  Method to subtract the value of a BrobIntk passed as argument to this BrobInt using int array
@@ -103,8 +134,24 @@ public class BrobInt {
    *  @return BrobInt that is the difference of the value of this BrobInt and the one passed in
    *  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
    public BrobInt subtractInt( BrobInt gint ) {
-      throw new UnsupportedOperationException( "\n         Sorry, that operation is not yet implemented." );
+      int borrow = 0;
+      int carry = 0;
+      int[] difference = new int[];
+
+
+      if (intVersion[].sign == gint.sign) {
+        difference[] = reversed.addInt(gint);
+
+      } else if ( ) {
+        for ( int i = 0; i < intVersion.length; i++ ) {
+          difference[i] =
+        }
+      }
+
+
+
    }
+
 
   /** ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    *  Method to multiply the value of a BrobIntk passed as argument to this BrobInt
@@ -121,6 +168,19 @@ public class BrobInt {
    *  @return BrobInt that is the dividend of this BrobInt divided by the one passed in
    *  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
    public BrobInt divide( BrobInt gint ) {
+      int[] dividend = new int[];
+
+      if (reversed.compareTo(gint.toString()) < 0 ) {
+         dividend = 1;
+      }
+
+      if ( reversed.compareTo(gint.toString())) {
+        dividend = 0;
+      }
+
+
+
+
       throw new UnsupportedOperationException( "\n         Sorry, that operation is not yet implemented." );
    }
 
@@ -130,6 +190,9 @@ public class BrobInt {
    *  @return BrobInt that is the remainder of division of this BrobInt by the one passed in
    *  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
    public BrobInt remainder( BrobInt gint ) {
+
+
+
       throw new UnsupportedOperationException( "\n         Sorry, that operation is not yet implemented." );
    }
 
