@@ -29,7 +29,7 @@ public class BrobInt {
 
 
    private String internalValue = "";        // internal String representation of this BrobInt
-   private byte   sign          = 0;         // "0" is positive, "1" is negative
+   public  int   sign           = 0;         // "0" is positive, "1" is negative
    private String reversed      = "";        // the backwards version of the internal String representation
    private int[] intVersion     = null;      // int array for storing the string values; uses the reversed string
    private int[] longerValue    = null;
@@ -45,18 +45,14 @@ public class BrobInt {
       String val = value.trim();
       internalValue = value;
       reversed = new StringBuffer(internalValue).reverse().toString();
-      int[] intVersion = new int[str.length];
-      for ( int i = 0; i < reversed.length; i++ ) {
+      if ( reversed.charAt( internalValue.length() - 1) == '-' ) {
+        sign = 1;
+        reversed = reversed.substring(0, reversed.length() - 1 );
+      }
+      int[] intVersion = new int[reversed.length()];
+      for ( int i = 0; i < reversed.length(); i++ ) {
         intVersion[i] = Integer.parseInt( "" + reversed.charAt(i) );
       }
-      if ( reversed.charAt( internalValue.length() - 1) == '-' ) {
-        sign = 0;
-      }
-      // how do we account for if positive is not specified ???
-      else if ( reversed.charAt( internalValue.length() - 1) == '+') {
-        sign = 1;
-      }
-
 
    }
 
@@ -72,7 +68,6 @@ public class BrobInt {
       for ( int i = 0 ; i < internalValue.length(); i++ ) {
         if ( !digits.contains("" + internalValue.charAt(i)) ) {
           throw new NumberFormatException("Invalid argument given, number must be a number");
-          return false;
         }
       }
       return true;
@@ -82,8 +77,8 @@ public class BrobInt {
    *  Method to reverse the value of this BrobInt
    *  @return BrobInt that is the reverse of the value of this BrobInt
    *  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-   public BrobInt reverser() {
-      reversed = new StringBuffer(internalValue).reverse().toString();
+   public String reverser() {
+      return new StringBuffer(internalValue).reverse().toString();
    }
 
   /** ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -93,7 +88,7 @@ public class BrobInt {
    *  @return BrobInt that is the reverse of the value of the BrobInt passed as argument
    *  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
    public static BrobInt reverser( BrobInt gint ) {
-      return gint.reverser();
+      return gint;
    }
 
   /** ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -102,29 +97,42 @@ public class BrobInt {
    *  @return BrobInt that is the sum of the value of this BrobInt and the one passed in
    *  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
    public BrobInt addInt( BrobInt gint ) {
-      if ( internalValue.length >= gint.length ) {
-        longerValue = intVersion[];
-        shorterValue = gint;
-      } else if ( internalValue.length < gint.length ) {
-        longerValue = gint;
-        shorterValue = intVersion[];
+     int carry = 0;
+     int[] result = new int[ longerValue.length + 1 ];
+     int resultSign = 0;
+     String resultValue = "";
+
+      if ( reversed.length() >= gint.internalValue.length() ) {
+        longerValue = intVersion;
+        shorterValue = gint.intVersion;
+      } else if ( reversed.length() < gint.internalValue.length() ) {
+        longerValue = gint.intVersion;
+        shorterValue = intVersion;
       }
-      int carry = 0;
-      int[] result = new int[ longerValue.length + 1 ];
-
-// should intVersion be replaced with longerValue ??
-
-      for ( int i = 0; i < intVersion.length; i++ ) {
-        result[i] = intVersion[i] + gint.intVersion[i] + carry;
-        if ( result[i] > 9 ) {
-          result[i] -= 10;
-          carry = 1;
-        } else {
-          carry = 0;
-        }
+      if ( sign == 1 && gint.sign == 1 ) {
+        resultSign = 1;
       }
 
-      return new BrobInt(result);
+     if ( sign == gint.sign ) {
+       for ( int i = 0; i < intVersion.length; i++ ) {
+         result[i] = intVersion[i] + gint.intVersion[i] + carry;
+         if ( result[i] > 9 ) {
+           result[i] -= 10;
+           carry = 1;
+         } else {
+           carry = 0;
+         }
+       }
+     } else if ( sign != gint.sign ) {
+       return subtractInt(gint);
+     }
+      if (resultSign == 1 ) {
+         resultValue = "-";
+      }
+      for ( int i = result.length - 1; i >= 0; i-- ) {
+        resultValue += result[i];
+      }
+      return new BrobInt(resultValue);
    }
 
 
@@ -136,20 +144,74 @@ public class BrobInt {
    public BrobInt subtractInt( BrobInt gint ) {
       int borrow = 0;
       int carry = 0;
-      int[] difference = new int[];
+      int[] difference = new int[ longerValue.length + 1 ];
+      int resultSign = 0;
+      String resultValue = "";
 
+      if ( reversed.length() >= gint.internalValue.length() ) {
+        longerValue = intVersion;
+        shorterValue = gint.intVersion;
+      } else if ( reversed.length() < gint.reversed.length() ) {
+        longerValue = gint.intVersion;
+        shorterValue = intVersion;
+      }
 
-      if (intVersion[].sign == gint.sign) {
-        difference[] = reversed.addInt(gint);
-
-      } else if ( ) {
-        for ( int i = 0; i < intVersion.length; i++ ) {
-          difference[i] =
+      if ( sign == 0 && gint.sign == 0 ) {
+        if ( reversed.length() > gint.reversed.length() ) {
+          for ( int i = 0; i <= reversed.length() - 1; i++ ) {
+            difference[i] = intVersion[i] - gint.intVersion[i] + borrow;
+            if ( gint.intVersion[i] > intVersion[i]) {
+              difference[i+1] -= 1;
+              borrow = 10;
+            } else {
+              borrow = 0;
+            }
+          } resultSign = 0;
+        } else if ( reversed.length() < gint.reversed.length()) {
+          for ( int i = 0; i <= gint.reversed.length() - 1; i++ ) {
+            difference[i] = gint.intVersion[i] - intVersion[i] + borrow;
+            if ( gint.intVersion[i] < intVersion[i]) {
+              difference[i+1] -= 1;
+              borrow = 10;
+            } else {
+              borrow = 0;
+            }
+          }
+          resultSign = 1;
         }
       }
 
 
+      else if ( sign == 0 && gint.sign == 1 ) {
+          return addInt(gint);
+      }
+      else if ( sign == 1 && gint.sign == 0 ) {
+        if ( reversed.length() > gint.reversed.length() ) {
 
+        }
+      }
+      else if (sign == 1 && gint.sign == 1 ) {
+        if ( reversed.length() > gint.reversed.length() ) {
+          for ( int i = 0; i <= reversed.length() - 1; i++ ) {
+            difference[i] = intVersion[i] - gint.intVersion[i] + borrow;
+            if ( gint.intVersion[i] > intVersion[i]) {
+              difference[i+1] -= 1;
+              borrow = 10;
+            } else {
+              borrow = 0;
+            }
+          } resultSign = 1;
+        }
+      }
+
+
+      if (resultSign == 1 ) {
+         resultValue = "-";
+      }
+      for ( int i = difference.length - 1; i >= 0; i-- ) {
+        resultValue += difference[i];
+      }
+      return new BrobInt(resultValue);
    }
 
 
@@ -168,16 +230,16 @@ public class BrobInt {
    *  @return BrobInt that is the dividend of this BrobInt divided by the one passed in
    *  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
    public BrobInt divide( BrobInt gint ) {
-      int[] dividend = new int[];
-
-      if (reversed.compareTo(gint.toString()) < 0 ) {
-         dividend = 1;
-      }
-
-      if ( reversed.compareTo(gint.toString())) {
-        dividend = 0;
-      }
-
+      int[] dividend = new int[2];
+      //
+      // if (reversed.compareTo(gint.toString()) < 0 ) {
+      //    dividend = 1;
+      // }
+      //
+      // if ( reversed.compareTo(gint.toString())) {
+      //   dividend = 0;
+      // }
+      //
 
 
 
@@ -239,18 +301,18 @@ public class BrobInt {
    *  @return String  which is the String representation of this BrobInt
    *  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
    public String toString() {
-      String byteVersionOutput = "";
-      for( int i = 0; i < byteVersion.length; i++ ) {
-         byteVersionOutput = byteVersionOutput.concat( Byte.toString( byteVersion[i] ) );
+      String intVersionOutput = "";
+      for( int i = 0; i < intVersion.length; i++ ) {
+         intVersionOutput = intVersionOutput.concat( Integer.toString( intVersion[i] ) );
       }
-      byteVersionOutput = new String( new StringBuffer( byteVersionOutput ).reverse() );
+      intVersionOutput = new String( new StringBuffer( intVersionOutput ).reverse() );
       return internalValue;
    }
 
   /** ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    *  Method to display an Array representation of this BrobInt as its bytes
    *  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-   public void toArray( byte[] d ) {
+   public void toArray( int[] d ) {
       System.out.println( Arrays.toString( d ) );
    }
 
