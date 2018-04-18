@@ -43,7 +43,7 @@ public class BrobInt {
    */
    public BrobInt( String value ) {
       String val = value.trim();
-      internalValue = value;
+      internalValue = val;
       reversed = new StringBuffer(internalValue).reverse().toString();
       if ( reversed.charAt( internalValue.length() - 1) == '-' ) {
         sign = 1;
@@ -96,7 +96,7 @@ public class BrobInt {
    *  @param  gint         BrobInt to add to this
    *  @return BrobInt that is the sum of the value of this BrobInt and the one passed in
    *  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-   public BrobInt addInt( BrobInt gint ) {
+   public BrobInt add( BrobInt gint ) {
      int carry = 0;
      int[] result = new int[ longerValue.length + 1 ];
      int resultSign = 0;
@@ -124,7 +124,7 @@ public class BrobInt {
          }
        }
      } else if ( sign != gint.sign ) {
-       return subtractInt(gint);
+       return subtract(gint);
      }
       if (resultSign == 1 ) {
          resultValue = "-";
@@ -132,6 +132,7 @@ public class BrobInt {
       for ( int i = result.length - 1; i >= 0; i-- ) {
         resultValue += result[i];
       }
+      System.out.println( "current resultValue:" + resultValue);
       return new BrobInt(resultValue);
    }
 
@@ -141,7 +142,7 @@ public class BrobInt {
    *  @param  gint         BrobInt to subtract from this
    *  @return BrobInt that is the difference of the value of this BrobInt and the one passed in
    *  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-   public BrobInt subtractInt( BrobInt gint ) {
+   public BrobInt subtract( BrobInt gint ) {
       int borrow = 0;
       int carry = 0;
       int[] difference = new int[ longerValue.length + 1 ];
@@ -183,7 +184,7 @@ public class BrobInt {
 
 
       else if ( sign == 0 && gint.sign == 1 ) {
-          return addInt(gint);
+          return add(gint);
       }
       else if ( sign == 1 && gint.sign == 0 ) {
         if ( reversed.length() > gint.reversed.length() ) {
@@ -301,11 +302,6 @@ public class BrobInt {
    *  @return String  which is the String representation of this BrobInt
    *  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
    public String toString() {
-      String intVersionOutput = "";
-      for( int i = 0; i < intVersion.length; i++ ) {
-         intVersionOutput = intVersionOutput.concat( Integer.toString( intVersion[i] ) );
-      }
-      intVersionOutput = new String( new StringBuffer( intVersionOutput ).reverse() );
       return internalValue;
    }
 
