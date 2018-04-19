@@ -109,33 +109,55 @@ public class BrobInt {
         longerValue = gint.reversed.length();
         smallerValue = reversed.length();
       }
-      int[] result = new int[ longerValue + 1 ];
+      int[] result = new int[ longerValue + 2 ];
 
      if ( sign == 1 && gint.sign == 1 ) {
         resultSign = 1;
      }
 
      if ( sign == gint.sign ) {
-       for ( int i = 0; i < longerValue; i++ ) {
-         if ( i < smallerValue ) {
-           result[i] = intVersion[i] + gint.intVersion[i] + carry;
-           if ( result[i] > 9 ) {
-             result[i] -= 10;
-             carry = 1;
+       if (reversed.length() >= gint.reversed.length()) {
+         for ( int i = 0; i < longerValue; i++ ) {
+           if ( i < smallerValue ) {
+             result[i] = intVersion[i] + gint.intVersion[i] + carry;
+             if ( result[i] > 9 ) {
+               result[i] -= 10;
+               carry = 1;
+             } else {
+               carry = 0;
+             }
            } else {
-             carry = 0;
+             result[i] = intVersion[i] + carry;
+             if ( result[i] > 9 ) {
+               result[i] -= 10;
+               carry = 1;
+             } else {
+               carry = 0;
+             }
            }
-         } else {
-           result[i] = intVersion[i] + carry;
-           if ( result[i] > 9 ) {
-             result[i] -= 10;
-             carry = 1;
+         }
+       } else if (gint.reversed.length() > reversed.length()) {
+         for ( int i = 0; i < longerValue; i++ ) {
+           if ( i < smallerValue ) {
+             result[i] = intVersion[i] + gint.intVersion[i] + carry;
+             if ( result[i] > 9 ) {
+               result[i] -= 10;
+               carry = 1;
+             } else {
+               carry = 0;
+             }
            } else {
-             carry = 0;
+             result[i] = gint.intVersion[i] + carry;
+             if ( result[i] > 9 ) {
+               result[i] -= 10;
+               carry = 1;
+             } else {
+               carry = 0;
+             }
            }
          }
        }
-    } else if ( sign != gint.sign ) {
+     } else if ( sign != gint.sign ) {
        return subtract(gint);
      }
      for (int i = result.length - 1; i >= 0; i-- ) {
@@ -279,23 +301,23 @@ public class BrobInt {
    *        THAT was easy.....
    *  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
    public int compareTo( BrobInt gint ) {
-   if( internalValue.length() > gint.internalValue.length() ) {
-      return 1;
-   } else if( internalValue.length() < gint.internalValue.length() ) {
-      return (-1);
-   } else {
-      for( int i = 0; i < internalValue.length(); i++ ) {
-         Character a = new Character( internalValue.charAt(i) );
-         Character b = new Character( gint.internalValue.charAt(i) );
-         if( new Character(a).compareTo( new Character(b) ) > 0 ) {
-            return 1;
-         } else if( new Character(a).compareTo( new Character(b) ) < 0 ) {
-            return (-1);
-         }
-      }
-   }
-   return 0;
-}
+     if( internalValue.length() > gint.internalValue.length() ) {
+        return 1;
+     } else if( internalValue.length() < gint.internalValue.length() ) {
+        return (-1);
+     } else {
+        for( int i = 0; i < internalValue.length(); i++ ) {
+           Character a = new Character( internalValue.charAt(i) );
+           Character b = new Character( gint.internalValue.charAt(i) );
+           if( new Character(a).compareTo( new Character(b) ) > 0 ) {
+              return 1;
+           } else if( new Character(a).compareTo( new Character(b) ) < 0 ) {
+              return (-1);
+           }
+        }
+     }
+    return 0;
+  }
 
   /** ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    *  Method to check if a BrobInt passed as argument is equal to this BrobInt
