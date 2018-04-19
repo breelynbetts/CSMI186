@@ -100,6 +100,8 @@ public class BrobInt {
      int carry = 0;
      int resultSign = 0;
      String resultValue = "";
+     int borrow = 0;
+
 
       if ( reversed.length() >= gint.reversed.length() ) {
         longerValue = reversed.length();
@@ -160,8 +162,30 @@ public class BrobInt {
          }
        }
      } else if ( sign != gint.sign ) {
-       return subtract(gint);
+       if ( reversed.length() > gint.reversed.length() ) {
+         for ( int i = 0; i <= reversed.length() - 1; i++ ) {
+           result[i] = intVersion[i] - gint.intVersion[i] + borrow;
+           if ( gint.intVersion[i] > intVersion[i]) {
+             result[i+1] -= 1;
+             borrow = 10;
+           } else {
+             borrow = 0;
+           }
+         } resultSign = 0;
+       } else if ( reversed.length() < gint.reversed.length()) {
+         for ( int i = 0; i <= gint.reversed.length() - 1; i++ ) {
+           result[i] = gint.intVersion[i] - intVersion[i] + borrow;
+           if ( gint.intVersion[i] < intVersion[i]) {
+             result[i+1] -= 1;
+             borrow = 10;
+           } else {
+             borrow = 0;
+           }
+         }
+         resultSign = 1;
+       }
      }
+
      for (int i = result.length - 1; i >= 0; i-- ) {
        resultValue += String.valueOf(result[i]);
      }
@@ -186,17 +210,17 @@ public class BrobInt {
    *  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
    public BrobInt subtract( BrobInt gint ) {
       int borrow = 0;
-      int carry = 0;
-      int[] difference = new int[ longerValue + 1 ];
       int resultSign = 0;
       String resultValue = "";
 
-      if ( reversed.length() >= gint.internalValue.length() ) {
+      if ( reversed.length() >= gint.reversed.length() ) {
         longerValue = reversed.length();
-
+        smallerValue = gint.reversed.length();
       } else if ( reversed.length() < gint.reversed.length() ) {
         longerValue = gint.reversed.length();
+        smallerValue = reversed.length();
       }
+      int[] difference = new int[ longerValue + 1 ];
 
       if ( sign == 0 && gint.sign == 0 ) {
         if ( reversed.length() > gint.reversed.length() ) {
