@@ -116,7 +116,7 @@ public class BrobInt {
 
      if ( sign == gint.sign ) {
        if (reversed.length() >= gint.reversed.length()) {
-         for ( int i = 0; i < longerValue; i++ ) {
+         for ( int i = 0; i <= longerValue; i++ ) {
            if ( i < smallerValue ) {
              result[i] = intVersion[i] + gint.intVersion[i] + carry;
              if ( result[i] > 9 ) {
@@ -125,7 +125,7 @@ public class BrobInt {
              } else {
                carry = 0;
              }
-           } else {
+           } else if ( i < longerValue) {
              result[i] = intVersion[i] + carry;
              if ( result[i] > 9 ) {
                result[i] -= 10;
@@ -133,9 +133,12 @@ public class BrobInt {
              } else {
                carry = 0;
              }
+           } else {
+             result[i] = carry;
            }
+
          }
-       } else if (gint.reversed.length() >= reversed.length()) {
+       } else if (gint.reversed.length() > reversed.length()) {
          for ( int i = 0; i < longerValue; i++ ) {
            if ( i < smallerValue ) {
              result[i] = intVersion[i] + gint.intVersion[i] + carry;
