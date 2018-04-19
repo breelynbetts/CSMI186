@@ -230,7 +230,7 @@ public class BrobIntTester {
          System.out.println( "    Test 014: Adding g11 and g12: " );
          System.out.println( "      expecting: 30 and got " + g11.add( g12 ) );
       }
-      catch( Exception e ) { System.out.println( "        Exception thrown:  " ); }
+      catch( Exception e ) { System.out.println( "        Exception thrown:  "  ); e.printStackTrace(); }
 
       System.out.println( "\n    Test 015: Making a thirteenth new BrobInt, calling add methods: "  );
       try {
