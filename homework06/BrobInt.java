@@ -54,7 +54,6 @@ public class BrobInt {
       for ( int i = 0; i < reversed.length(); i++ ) {
         intVersion[i] = Integer.parseInt( "" + reversed.charAt(i) );
       }
-      toArray(intVersion);
    }
 
   /** ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -136,7 +135,7 @@ public class BrobInt {
              }
            }
          }
-       } else if (gint.reversed.length() > reversed.length()) {
+       } else if (gint.reversed.length() >= reversed.length()) {
          for ( int i = 0; i < longerValue; i++ ) {
            if ( i < smallerValue ) {
              result[i] = intVersion[i] + gint.intVersion[i] + carry;
