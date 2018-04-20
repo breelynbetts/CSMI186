@@ -163,7 +163,7 @@ public class BrobInt {
        }
      } else if ( sign != gint.sign ) {
        if ( reversed.length() > gint.reversed.length() ) {
-         for ( int i = 0; i <= reversed.length() - 1; i++ ) {
+         for ( int i = 0; i <= longerValue; i++ ) {
            result[i] = intVersion[i] - gint.intVersion[i] + borrow;
            if ( gint.intVersion[i] > intVersion[i]) {
              result[i+1] -= 1;
@@ -173,7 +173,7 @@ public class BrobInt {
            }
          } resultSign = 0;
        } else if ( reversed.length() < gint.reversed.length()) {
-         for ( int i = 0; i <= gint.reversed.length() - 1; i++ ) {
+         for ( int i = 0; i <= longerValue; i++ ) {
            result[i] = gint.intVersion[i] - intVersion[i] + borrow;
            if ( gint.intVersion[i] < intVersion[i]) {
              result[i+1] -= 1;
@@ -212,6 +212,7 @@ public class BrobInt {
       int borrow = 0;
       int resultSign = 0;
       String resultValue = "";
+      int carry = 0;
 
       if ( reversed.length() >= gint.reversed.length() ) {
         longerValue = reversed.length();
@@ -220,27 +221,52 @@ public class BrobInt {
         longerValue = gint.reversed.length();
         smallerValue = reversed.length();
       }
-      int[] difference = new int[ longerValue + 1 ];
+      int[] result = new int[ longerValue + 1 ];
 
       if ( sign == 0 && gint.sign == 0 ) {
-        if ( reversed.length() > gint.reversed.length() ) {
-          for ( int i = 0; i <= reversed.length() - 1; i++ ) {
-            difference[i] = intVersion[i] - gint.intVersion[i] + borrow;
-            if ( gint.intVersion[i] > intVersion[i]) {
-              difference[i+1] -= 1;
-              borrow = 10;
+        if ( reversed.length() >= gint.reversed.length() ) {
+          for ( int i = 0; i <= longerValue; i++ ) {
+            if (i < smallerValue ) {
+              result[i] = intVersion[i] - gint.intVersion[i] + borrow;
+              if ( result[i] < 0 ) {
+                result[i+1] -= 1;
+                borrow = 10;
+              } else {
+                borrow = 0;
+              }
+            } else if ( i < longerValue ) {
+              result[i] = intVersion[i] + borrow;
+              if ( result[i] < 0) {
+                result[i+1] -= 1;
+                borrow = 10;
+              } else {
+                borrow = 0;
+              }
             } else {
-              borrow = 0;
+              result[i] = borrow;
             }
+
           } resultSign = 0;
         } else if ( reversed.length() < gint.reversed.length()) {
-          for ( int i = 0; i <= gint.reversed.length() - 1; i++ ) {
-            difference[i] = gint.intVersion[i] - intVersion[i] + borrow;
-            if ( gint.intVersion[i] < intVersion[i]) {
-              difference[i+1] -= 1;
-              borrow = 10;
-            } else {
-              borrow = 0;
+          for ( int i = 0; i <= longerValue; i++ ) {
+            if (i < smallerValue) {
+              result[i] = gint.intVersion[i] - intVersion[i] + borrow;
+              if ( result[i] < 0 ) {
+                result[i+1] -= 1;
+                borrow = 10;
+              } else {
+                borrow = 0;
+              }
+            } else if ( i < longerValue) {
+              result[i] = gint.intVersion[i] + borrow;
+              if ( result[i] < 0) {
+                result[i+1] -= 1;
+                borrow = 10;
+              } else {
+                borrow = 0;
+              }
+            } else  {
+              result[i] = borrow;
             }
           }
           resultSign = 1;
@@ -248,32 +274,164 @@ public class BrobInt {
       }
 
       else if ( sign == 0 && gint.sign == 1 ) {
-          return add(gint);
-      }
-      else if ( sign == 1 && gint.sign == 0 ) {
-        if ( reversed.length() > gint.reversed.length() ) {
-
+        if (reversed.length() >= gint.reversed.length()) {
+          for ( int i = 0; i <= longerValue; i++ ) {
+            if ( i < smallerValue ) {
+              result[i] = intVersion[i] + gint.intVersion[i] + carry;
+              if ( result[i] > 9 ) {
+                result[i] -= 10;
+                carry = 1;
+              } else {
+                carry = 0;
+              }
+            } else if ( i < longerValue) {
+              result[i] = intVersion[i] + carry;
+              if ( result[i] > 9 ) {
+                result[i] -= 10;
+                carry = 1;
+              } else {
+                carry = 0;
+              }
+            } else {
+              result[i] = carry;
+            }
+          }
+        } else if (gint.reversed.length() > reversed.length()) {
+          for ( int i = 0; i < longerValue; i++ ) {
+            if ( i < smallerValue ) {
+              result[i] = intVersion[i] + gint.intVersion[i] + carry;
+              if ( result[i] > 9 ) {
+                result[i] -= 10;
+                carry = 1;
+              } else {
+                carry = 0;
+              }
+            } else {
+              result[i] = gint.intVersion[i] + carry;
+              if ( result[i] > 9 ) {
+                result[i] -= 10;
+                carry = 1;
+              } else {
+                carry = 0;
+              }
+            }
+          }
         }
       }
-      else if (sign == 1 && gint.sign == 1 ) {
-        if ( reversed.length() > gint.reversed.length() ) {
-          for ( int i = 0; i <= reversed.length() - 1; i++ ) {
-            difference[i] = intVersion[i] - gint.intVersion[i] + borrow;
-            if ( gint.intVersion[i] > intVersion[i]) {
-              difference[i+1] -= 1;
-              borrow = 10;
+      else if ( sign == 1 && gint.sign == 0 ) {
+        if (reversed.length() >= gint.reversed.length()) {
+          for ( int i = 0; i <= longerValue; i++ ) {
+            if ( i < smallerValue ) {
+              result[i] = intVersion[i] + gint.intVersion[i] + carry;
+              if ( result[i] > 9 ) {
+                result[i] -= 10;
+                carry = 1;
+              } else {
+                carry = 0;
+              }
+            } else if ( i < longerValue) {
+              result[i] = intVersion[i] + carry;
+              if ( result[i] > 9 ) {
+                result[i] -= 10;
+                carry = 1;
+              } else {
+                carry = 0;
+              }
             } else {
-              borrow = 0;
+              result[i] = carry;
+            }
+          }
+        } else if (gint.reversed.length() > reversed.length()) {
+          for ( int i = 0; i < longerValue; i++ ) {
+            if ( i < smallerValue ) {
+              result[i] = intVersion[i] + gint.intVersion[i] + carry;
+              if ( result[i] > 9 ) {
+                result[i] -= 10;
+                carry = 1;
+              } else {
+                carry = 0;
+              }
+            } else {
+              result[i] = gint.intVersion[i] + carry;
+              if ( result[i] > 9 ) {
+                result[i] -= 10;
+                carry = 1;
+              } else {
+                carry = 0;
+              }
             }
           } resultSign = 1;
         }
       }
+      else if ( sign == 1 && gint.sign == 1 ) {
+        if ( reversed.length() >= gint.reversed.length() ) {
+          for ( int i = 0; i <= longerValue; i++ ) {
+            if (i < smallerValue ) {
+              result[i] = intVersion[i] - gint.intVersion[i] + borrow;
+              if ( result[i] < 0 ) {
+                result[i+1] -= 1;
+                borrow = 10;
+              } else {
+                borrow = 0;
+              }
+            } else if ( i < longerValue ) {
+              result[i] = intVersion[i] + borrow;
+              if ( result[i] < 0) {
+                result[i+1] -= 1;
+                borrow = 10;
+              } else {
+                borrow = 0;
+              }
+            } else {
+              result[i] = borrow;
+            } if ( reversed.length() > gint.reversed.length() ) {
+              resultSign = 1;
+            } else if (reversed.length() == gint.reversed.length()) {
+               if (this.compareTo(gint) == -1 ) {
+                 resultSign = 0;
+               } else if (this.compareTo(gint) == 1) {
+                 resultSign = 1;
+               }
+               System.out.println("resultSign : " + Integer.toString(resultSign));
+            }
+          }
+        } else if ( reversed.length() < gint.reversed.length()) {
+          for ( int i = 0; i <= longerValue; i++ ) {
+            if (i < smallerValue) {
+              result[i] = gint.intVersion[i] - intVersion[i] + borrow;
+              if ( result[i] < 0 ) {
+                result[i+1] -= 1;
+                borrow = 10;
+              } else {
+                borrow = 0;
+              }
+            } else if ( i < longerValue) {
+              result[i] = gint.intVersion[i] + borrow;
+              if ( result[i] < 0) {
+                result[i+1] -= 1;
+                borrow = 10;
+              } else {
+                borrow = 0;
+              }
+            } else  {
+              result[i] = borrow;
+            }
+          }
+        } resultSign = 0;
+      }
+
+      for ( int i = result.length - 1; i >= 0; i-- ) {
+        resultValue += result[i];
+      }
+
+      int j = 0;
+      while ( resultValue.charAt(j) == '0') {
+        j++;
+      }
+      resultValue = resultValue.substring(j, resultValue.length());
 
       if (resultSign == 1 ) {
-         resultValue = "-";
-      }
-      for ( int i = difference.length - 1; i >= 0; i-- ) {
-        resultValue += difference[i];
+         resultValue = "-" + resultValue;
       }
       return new BrobInt(resultValue);
    }
