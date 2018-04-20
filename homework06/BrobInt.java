@@ -384,16 +384,11 @@ public class BrobInt {
               }
             } else {
               result[i] = borrow;
-            } if ( reversed.length() > gint.reversed.length() ) {
-              resultSign = 1;
-            } else if (reversed.length() == gint.reversed.length()) {
-               if (this.compareTo(gint) == -1 ) {
-                 resultSign = 0;
-               } else if (this.compareTo(gint) == 1) {
-                 resultSign = 1;
-               }
-               System.out.println("resultSign : " + Integer.toString(resultSign));
             }
+          } if (this.compareTo(gint) == -1 ) {
+            resultSign = 0;
+          } else if (this.compareTo(gint) == 1) {
+            resultSign = 1;
           }
         } else if ( reversed.length() < gint.reversed.length()) {
           for ( int i = 0; i <= longerValue; i++ ) {
@@ -416,8 +411,8 @@ public class BrobInt {
             } else  {
               result[i] = borrow;
             }
-          }
-        } resultSign = 0;
+          } resultSign = 0;
+        }
       }
 
       for ( int i = result.length - 1; i >= 0; i-- ) {
@@ -429,10 +424,11 @@ public class BrobInt {
         j++;
       }
       resultValue = resultValue.substring(j, resultValue.length());
-
+      System.out.println( Integer.toString(resultSign));
       if (resultSign == 1 ) {
          resultValue = "-" + resultValue;
       }
+      System.out.println(resultValue);
       return new BrobInt(resultValue);
    }
 
