@@ -10,6 +10,9 @@ public class Fibonacci {
    private static String end3        = "rd";
    private static String endRest     = "th";
    private static String cardinality = "";
+   public static BrobInt brob1 = new BrobInt("0");
+   public static BrobInt brob2 = new BrobInt("1");
+   public static BrobInt brob3 = new BrobInt("1");
 
    private static final  int NO_CMD_LINE_ARGS = -1;
    private static final  int BAD_CMD_LINE_ARG = -2;
@@ -56,17 +59,23 @@ public class Fibonacci {
 
       System.out.println( "\n\n   Starting from zero, the " + maxCount + cardinality + " Fibonacci number is: " );
 
-     // NOTE: you may want to handle the first and second Fibonacc numbers as 'special cases'...
-
-     // NOTE: you WILL need to initialize your BrobInts to keep track of things....
-
      // NOTE: this section is just a happy notification that lets the user know to be patient.......
       if( maxCount > working ) {
          System.out.println( "\n                This may take me a while; please be patient!!\n\n" );
       }
 
-      System.out.println( "\n\n\n  ...HA!! Like I'm going to do the ENTIRE thing for you.....  *grins*" );
-
+      if ( maxCount == 0 ) {
+        brob3 = brob1;
+      } else if ( maxCount == 1 ) {
+        brob3 = brob2;
+      } else {
+        for (int i = 2; i < maxCount; i++ ) {
+          brob3 = brob1.add(brob2);
+          brob1 = brob2;
+          brob2 = brob3;
+        }
+      }
+      System.out.println( "\t" + brob3 );
 
       System.exit( 0 );
    }
