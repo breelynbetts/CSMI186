@@ -364,7 +364,7 @@ public class BrobInt {
         }
       }
       else if ( sign == 1 && gint.sign == 1 ) {
-        if ( reversed.length() >= gint.reversed.length() ) {
+        if ( reversed.length() >= gint.reversed.length() && this.compareTo(gint) == 1 ) {
           for ( int i = 0; i <= longerValue; i++ ) {
             if (i < smallerValue ) {
               result[i] = intVersion[i] - gint.intVersion[i] + borrow;
@@ -385,7 +385,8 @@ public class BrobInt {
             } else {
               result[i] = borrow;
             }
-          } if (this.compareTo(gint) == -1 ) {
+          }
+          if (this.compareTo(gint) == -1 ) {
             resultSign = 0;
           } else if (this.compareTo(gint) == 1) {
             resultSign = 1;
@@ -394,6 +395,7 @@ public class BrobInt {
           for ( int i = 0; i <= longerValue; i++ ) {
             if (i < smallerValue) {
               result[i] = gint.intVersion[i] - intVersion[i] + borrow;
+              toArray(result);
               if ( result[i] < 0 ) {
                 result[i+1] -= 1;
                 borrow = 10;
@@ -412,9 +414,18 @@ public class BrobInt {
               result[i] = borrow;
             }
           } resultSign = 0;
+        } else if (this.compareTo(gint) == -1 ) {
+          for ( int i = 0; i < longerValue; i++) {
+            result[i] = gint.intVersion[i] - intVersion[i] + borrow;
+            if (result[i] < 0) {
+              result[i+1] -= 1;
+              borrow = 10;
+            } else {
+              borrow = 0;
+            }
+          } resultSign = 0;
         }
       }
-
       for ( int i = result.length - 1; i >= 0; i-- ) {
         resultValue += result[i];
       }
@@ -424,11 +435,9 @@ public class BrobInt {
         j++;
       }
       resultValue = resultValue.substring(j, resultValue.length());
-      System.out.println( Integer.toString(resultSign));
       if (resultSign == 1 ) {
          resultValue = "-" + resultValue;
       }
-      System.out.println(resultValue);
       return new BrobInt(resultValue);
    }
 
