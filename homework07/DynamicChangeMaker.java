@@ -1,84 +1,98 @@
-// add JavaDocs
+/** ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *  File name    : DynamicChangeMaker.java
+ *  @author      : Breelyn Betts
+ *  Purpose      : Class that finds the optimal solution for the amount of coins
+ *                 with different denominations for a given target value
+ *  Date         : 05 - 01 - 18
+ *  Notes        : none
+ *  Warnings     : none
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *  Revision History
+ *  ================
+ *   Ver      Date     Modified by:  Reason for change or modification
+ *  -----  ----------  ------------  ---------------------------------------------------------------------
+ *  1.0.0  2018-05-01  Breelyn Betts Initial release; originaly have the DynamicChangeMaker() constructor,
+                                     makeChangeWithDynamicProgramming() method, and a main method to parse
+                                     arguments from the command line.
+    1.1.0  tbt
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 
 public class DynamicChangeMaker {
 
-  // public static int targetValue = 0;
-  // public static int[] denoms = null;
-  // public static String denominations = "";
-
+  private static int[] denominations = null;
+  private static Tuple denominationTuple = null;
+  private static Tuple[][] t = null;
 
   public DynamicChangeMaker() {
     super();
   }
 
   public static Tuple makeChangeWithDynamicProgramming( int[] denoms, int targetValue) {
-    int rows = 0;
-    int columns = 0;
+    int length = denoms.length;
+    int columns = targetValue + 1;
 
-    for ( int i = 0; i < denoms.length - 1; i++ ) {
-      for ( int j = i + 1; j < denoms.length; i++ ) {
-        if ( denoms[i] == denoms[j] || denoms[i] == 0) {
-          throw new IllegalArgumentException("Argument cannot have duplicates or zeroes");
+    System.out.println("denominations length: " + length + "\ntargetValue: " + targetValue);
+    if ( targetValue < 1 ) {
+      throw new IllegalArgumentException("Target Value must be greater than 0");
+    }
+
+    for ( int i = 0; i < length - 1; i++ ) {
+      for (int j = i + 1; j < length; j++ ) {
+        if ( denoms[i] == denoms[j] || denoms[i] < 1 || denoms[j] < 1 || denoms.length < 1 ) {
+          throw new IllegalArgumentException( "There may not be any duplicate denominations.");
         }
       }
-      rows = denoms.length;
-    }
-     // check for targetValue
-    if ( targetValue < 1 ) {
-      throw new IllegalArgumentException("Target Value muse be greater than 0");
-    } else {
-      columns = targetValue + 1;
     }
 
-    Tuple[][] t = new Tuple[rows][columns];
+    t = new Tuple[length][columns];
 
-    for ( int i = 0; i < rows; i++) {
-      for (int j = 0; j < columns; j++) {
-        if ( i == 0 ) {
-          if (j == 0) {
-            t[i][j] = new Tuple(denoms.length);
-          }
-          if (denoms[i] > j) {
-            t[i][j] = Tuple.IMPOSSIBLE;
+    for ( int rows = 0; rows < length; rows++) {
+      for (int col = 0; col < columns; col++) {
+        if ( rows == 0 ) {
+          if ( col == 0 ) {
+            t[rows][col] = new Tuple(length);
+          } else if (denoms[rows] > col) {
+            t[rows][col] = Tuple.IMPOSSIBLE;
           } else {
-            t[i][j] = new Tuple(denoms.length);
-            t[i][j].setElement(i, 1);
-            if ( t[i][j - denoms[i]].isImpossible() ) {
-              t[i][j] = Tuple.IMPOSSIBLE;
+            t[rows][col] = new Tuple(length);
+            t[rows][col].setElement(rows, 1);
+            if ( t[rows][col - denoms[rows]].isImpossible() ) {
+              t[rows][col] = Tuple.IMPOSSIBLE;
             } else {
-              t[i][j] = t[i][j].add(t[i][j - denoms[i]]);
+              t[rows][col] = t[rows][col].add(t[rows][col - denoms[rows]]);
             }
           }
         }
         else {
-          if (j == 0) {
-            t[i][j] = new Tuple(denoms.length);
+          if (col == 0) {
+            t[rows][col] = new Tuple(denoms.length);
           }
-          if (denoms[i] > j) {
-            t[i][j] = Tuple.IMPOSSIBLE;
-            if ( !(t[i-1][j].isImpossible()) ){
-              if ( t[i-1][j].total() < t[i][j].total()) {
-                t[i][j] = t[i-1][j];
+          if (denoms[rows] > col) {
+            t[rows][col] = Tuple.IMPOSSIBLE;
+            if ( !(t[rows-1][col].isImpossible()) ){
+              if ( t[rows-1][col].total() < t[rows][col].total()) {
+                t[rows][col] = t[rows-1][col];
               }
             }
           } else {
-            t[i][j] = new Tuple(denoms.length);
-            t[i][j].setElement(i, 1);
-            if ( t[i][j - denoms[i]].isImpossible() ) {
-              t[i][j] = Tuple.IMPOSSIBLE;
+            t[rows][col] = new Tuple(denoms.length);
+            t[rows][col].setElement(rows, 1);
+            if ( t[rows][col - denoms[rows]].isImpossible() ) {
+              t[rows][col] = Tuple.IMPOSSIBLE;
             } else {
-              t[i][j] = t[i][j].add(t[i][j - denoms[i]]);
-            } if ( !(t[i-1][j].isImpossible()) ){
-              if ( t[i-1][j].total() < t[i][j].total()) {
-                t[i][j] = t[i-1][j];
+              t[rows][col] = t[rows][col].add(t[rows][col - denoms[rows]]);
+            } if ( !(t[rows-1][col].isImpossible()) ){
+              if ( t[rows-1][col].total() < t[rows][col].total()) {
+                t[rows][col] = t[rows-1][col];
               }
             }
           }
         }
       }
     }
-    return t[rows-1][columns - 1];
+
+    return t[length - 1][targetValue];
   }
 
   public static void main ( String args[] ) {
