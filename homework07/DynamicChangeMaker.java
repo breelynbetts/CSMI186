@@ -32,7 +32,7 @@ public class DynamicChangeMaker {
     int length = denoms.length;
     int columns = targetValue + 1;
 
-    System.out.println("denominations length: " + length + "\ntargetValue: " + targetValue);
+    System.out.println("\ndenominations length: " + length + "\ntargetValue: " + targetValue);
     if ( targetValue < 1 ) {
       throw new IllegalArgumentException("Target Value must be greater than 0");
     }
@@ -91,6 +91,8 @@ public class DynamicChangeMaker {
         }
       }
     }
+    System.out.println("\t tuple: " + t[length-1][targetValue]);
+
 
     return t[length - 1][targetValue];
   }
